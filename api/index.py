@@ -1,16 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
-import os
-import sys
 
-# Add backend directory to path - handle both local and Vercel deployment
-current_dir = os.path.dirname(os.path.abspath(__file__))
-backend_path = os.path.join(current_dir, '..', 'backend')
-backend_path = os.path.normpath(os.path.abspath(backend_path))
-if backend_path not in sys.path:
-    sys.path.insert(0, backend_path)
-
+# Import from local api directory (files are copied here for Vercel deployment)
 from models import ClassifyRequest, ClassifyResponse, RewriteRequest, RewriteResponse
 from utils.llama_client import LlamaClient
 
