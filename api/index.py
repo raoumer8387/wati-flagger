@@ -1,10 +1,18 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
+import traceback
 
 # Import from local api directory (files are copied here for Vercel deployment)
-from models import ClassifyRequest, ClassifyResponse, RewriteRequest, RewriteResponse
-from utils.llama_client import LlamaClient
+try:
+    from models import ClassifyRequest, ClassifyResponse, RewriteRequest, RewriteResponse
+    from utils.llama_client import LlamaClient
+except ImportError as e:
+    # Better error message for debugging
+    import sys
+    print(f"Import error: {e}", file=sys.stderr)
+    print(f"Python path: {sys.path}", file=sys.stderr)
+    raise
 
 app = FastAPI(title="WhatsApp Template Classifier API")
 
@@ -29,7 +37,10 @@ def get_llama_client():
 
 @app.get("/")
 def root():
-    return {"message": "WhatsApp Template Classifier API"}
+    try:
+        return {"message": "WhatsApp Template Classifier API"}
+    except Exception as e:
+        return {"error": str(e), "traceback": traceback.format_exc()}
 
 
 @app.post("/classify", response_model=ClassifyResponse)
@@ -55,4 +66,4 @@ async def rewrite_utility(request: RewriteRequest):
 
 
 # Vercel serverless function handler
-handler = Mangum(app)
+handler = Mangum(app, lifespan="off")
