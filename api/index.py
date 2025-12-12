@@ -31,16 +31,23 @@ llama_client = None
 def get_llama_client():
     global llama_client
     if llama_client is None:
-        llama_client = LlamaClient()
+        try:
+            llama_client = LlamaClient()
+        except Exception as e:
+            raise HTTPException(
+                status_code=500, 
+                detail=f"Failed to initialize Llama client: {str(e)}. Please check OPENROUTER_API_KEY environment variable."
+            )
     return llama_client
 
 
 @app.get("/")
 def root():
-    try:
-        return {"message": "WhatsApp Template Classifier API"}
-    except Exception as e:
-        return {"error": str(e), "traceback": traceback.format_exc()}
+    """Health check endpoint that doesn't require LlamaClient initialization."""
+    return {
+        "message": "WhatsApp Template Classifier API",
+        "status": "running"
+    }
 
 
 @app.post("/classify", response_model=ClassifyResponse)
@@ -66,4 +73,11 @@ async def rewrite_utility(request: RewriteRequest):
 
 
 # Vercel serverless function handler
-handler = Mangum(app, lifespan="off")
+# Use lifespan="off" to avoid async context manager issues
+try:
+    handler = Mangum(app, lifespan="off")
+except Exception as e:
+    import sys
+    print(f"Error creating Mangum handler: {e}", file=sys.stderr)
+    print(f"Traceback: {traceback.format_exc()}", file=sys.stderr)
+    raise
