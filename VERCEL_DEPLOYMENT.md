@@ -32,18 +32,19 @@ The project has been configured with:
    - Import your GitHub repository
    - Vercel will auto-detect the project settings
 
-3. **Configure Environment Variables**
-   - In the Vercel project settings, go to "Environment Variables"
-   - Add the following variable:
-     - **Name**: `OPENROUTER_API_KEY`
-     - **Value**: Your OpenRouter API key
-     - **Environment**: Production, Preview, and Development
-
-4. **Configure Build Settings**
-   - **Root Directory**: Leave as root (`.`)
-   - **Build Command**: Vercel will auto-detect from `frontend/package.json`
+3. **Configure Build Settings** (Expand "Build and Output Settings")
+   - **Framework Preset**: Change from "FastAPI" to "Vite" (or "Other")
+   - **Root Directory**: `./` (should already be set)
+   - **Build Command**: `cd frontend && npm install && npm run build`
    - **Output Directory**: `frontend/dist`
    - **Install Command**: `cd frontend && npm install`
+
+4. **Configure Environment Variables** (Expand "Environment Variables")
+   - Click "Add" to add a new variable:
+     - **Name**: `OPENROUTER_API_KEY`
+     - **Value**: Your OpenRouter API key
+     - **Environment**: Select all (Production, Preview, Development)
+   - Click "Save"
 
 5. **Deploy**
    - Click "Deploy"
