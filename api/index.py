@@ -4,14 +4,23 @@ from mangum import Mangum
 import traceback
 
 # Import from local api directory (files are copied here for Vercel deployment)
+import os
+import sys
+
+# Add current directory to Python path (Vercel puts files in /var/task/api/)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
 try:
     from models import ClassifyRequest, ClassifyResponse, RewriteRequest, RewriteResponse
     from utils.llama_client import LlamaClient
 except ImportError as e:
     # Better error message for debugging
-    import sys
     print(f"Import error: {e}", file=sys.stderr)
     print(f"Python path: {sys.path}", file=sys.stderr)
+    print(f"Current dir: {current_dir}", file=sys.stderr)
+    print(f"Files in current dir: {os.listdir(current_dir) if os.path.exists(current_dir) else 'DIR NOT FOUND'}", file=sys.stderr)
     raise
 
 app = FastAPI(title="WhatsApp Template Classifier API")
