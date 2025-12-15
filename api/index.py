@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 import traceback
 
 # Import from local api directory (files are copied here for Vercel deployment)
@@ -81,5 +82,5 @@ async def rewrite_utility(request: RewriteRequest):
 
 
 # Vercel serverless function handler
-# Vercel's Python runtime automatically handles ASGI apps (FastAPI)
-# Export the app directly - Vercel will wrap it automatically
+# Export both app (for Vercel's ASGI detection) and handler (for compatibility)
+handler = Mangum(app)
