@@ -22,7 +22,7 @@ except ImportError as e:
     print(f"Files in current dir: {os.listdir(current_dir) if os.path.exists(current_dir) else 'DIR NOT FOUND'}", file=sys.stderr)
     raise
 
-app = FastAPI(title="WhatsApp Template Classifier API", root_path="/api")
+app = FastAPI(title="WhatsApp Template Classifier API")
 
 # Configure CORS - allow all origins for Vercel deployment
 app.add_middleware(
@@ -49,6 +49,7 @@ def get_llama_client():
     return llama_client
 
 
+@app.get("/api/")
 @app.get("/")
 def root():
     """Health check endpoint that doesn't require LlamaClient initialization."""
@@ -58,6 +59,7 @@ def root():
     }
 
 
+@app.post("/api/classify", response_model=ClassifyResponse)
 @app.post("/classify", response_model=ClassifyResponse)
 async def classify_message(request: ClassifyRequest):
     """Classify a WhatsApp message template."""
@@ -69,6 +71,7 @@ async def classify_message(request: ClassifyRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/api/rewrite-utility", response_model=RewriteResponse)
 @app.post("/rewrite-utility", response_model=RewriteResponse)
 async def rewrite_utility(request: RewriteRequest):
     """Rewrite a message as a Utility-compliant WhatsApp template."""
