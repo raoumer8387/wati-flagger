@@ -89,6 +89,14 @@ Be very strict. When in doubt, mark as Marketing.
                 "explanation": result.get("explanation", "No explanation provided")
             }
         except Exception as e:
+            error_msg = str(e)
+            # Check for 401 Unauthorized errors
+            if "401" in error_msg or "Unauthorized" in error_msg:
+                raise Exception(
+                    "OpenRouter API authentication failed (401 Unauthorized). "
+                    "Please check that OPENROUTER_API_KEY is set correctly in Vercel environment variables. "
+                    f"Error details: {error_msg}"
+                )
             raise Exception(f"Error classifying message: {str(e)}")
 
     def rewrite_as_utility(self, message: str) -> str:
@@ -114,5 +122,13 @@ Rewrite the message to be compliant with WhatsApp Utility template rules:
 
             return response.choices[0].message.content.strip()
         except Exception as e:
+            error_msg = str(e)
+            # Check for 401 Unauthorized errors
+            if "401" in error_msg or "Unauthorized" in error_msg:
+                raise Exception(
+                    "OpenRouter API authentication failed (401 Unauthorized). "
+                    "Please check that OPENROUTER_API_KEY is set correctly in Vercel environment variables. "
+                    f"Error details: {error_msg}"
+                )
             raise Exception(f"Error rewriting message: {str(e)}")
 

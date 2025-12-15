@@ -59,6 +59,18 @@ def root():
     }
 
 
+@app.get("/api/health")
+@app.get("/health")
+def health_check():
+    """Health check endpoint that verifies API key is configured."""
+    api_key_set = bool(os.getenv("OPENROUTER_API_KEY"))
+    return {
+        "status": "healthy" if api_key_set else "unhealthy",
+        "api_key_configured": api_key_set,
+        "message": "API key is configured" if api_key_set else "WARNING: OPENROUTER_API_KEY environment variable is not set"
+    }
+
+
 @app.post("/api/classify", response_model=ClassifyResponse)
 @app.post("/classify", response_model=ClassifyResponse)
 async def classify_message(request: ClassifyRequest):

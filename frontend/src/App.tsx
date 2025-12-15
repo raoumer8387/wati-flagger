@@ -1,36 +1,16 @@
 import { useState } from 'react';
 import ClassifierForm from './components/ClassifierForm';
 import ResultCard from './components/ResultCard';
-import RewriteCard from './components/RewriteCard';
 import { ClassifyResponse } from './api/client';
-import { rewriteAsUtility } from './api/client';
 
 function App() {
   const [classificationResult, setClassificationResult] = useState<ClassifyResponse | null>(null);
-  const [rewrittenMessage, setRewrittenMessage] = useState<string | null>(null);
   const [originalMessage, setOriginalMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isRewriting, setIsRewriting] = useState(false);
 
   const handleResult = (result: ClassifyResponse, message: string) => {
     setClassificationResult(result);
     setOriginalMessage(message);
-    setRewrittenMessage(null);
-  };
-
-  const handleRewrite = async (message: string) => {
-    setIsRewriting(true);
-    setOriginalMessage(message);
-
-    try {
-      const response = await rewriteAsUtility(message);
-      setRewrittenMessage(response.rewritten);
-    } catch (error) {
-      console.error('Error rewriting message:', error);
-      alert('Failed to rewrite message. Please try again.');
-    } finally {
-      setIsRewriting(false);
-    }
   };
 
   return (
@@ -40,9 +20,23 @@ function App() {
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
             WhatsApp Template Classifier
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 mb-4">
             Classify and optimize your WhatsApp Business message templates
           </p>
+          <div className="max-w-2xl mx-auto bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-yellow-700">
+                  <strong>Disclaimer:</strong> This application may give errors and should not be relied upon. It is provided for easy use only and may not always be accurate.
+                </p>
+              </div>
+            </div>
+          </div>
         </header>
 
         <div className="bg-white rounded-xl shadow-xl p-8 mb-8">
@@ -63,21 +57,6 @@ function App() {
           <ResultCard
             result={classificationResult}
             originalMessage={originalMessage}
-            onRewrite={handleRewrite}
-          />
-        )}
-
-        {isRewriting && (
-          <div className="text-center py-8">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
-            <p className="mt-4 text-gray-600">Rewriting message...</p>
-          </div>
-        )}
-
-        {rewrittenMessage && !isRewriting && (
-          <RewriteCard
-            rewritten={rewrittenMessage}
-            original={originalMessage}
           />
         )}
       </div>

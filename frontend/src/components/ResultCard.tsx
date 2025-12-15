@@ -3,10 +3,9 @@ import { ClassifyResponse } from '../api/client';
 interface ResultCardProps {
   result: ClassifyResponse;
   originalMessage: string;
-  onRewrite: (message: string) => void;
 }
 
-export default function ResultCard({ result, originalMessage, onRewrite }: ResultCardProps) {
+export default function ResultCard({ result, originalMessage }: ResultCardProps) {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'Utility':
@@ -88,13 +87,6 @@ export default function ResultCard({ result, originalMessage, onRewrite }: Resul
           {result.explanation}
         </p>
       </div>
-
-      <button
-        onClick={() => onRewrite(originalMessage)}
-        className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-purple-700 transition-colors"
-      >
-        Rewrite as Utility
-      </button>
     </div>
   );
 }
