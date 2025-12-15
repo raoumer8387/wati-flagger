@@ -2,10 +2,9 @@ import { ClassifyResponse } from '../api/client';
 
 interface ResultCardProps {
   result: ClassifyResponse;
-  originalMessage: string;
 }
 
-export default function ResultCard({ result, originalMessage }: ResultCardProps) {
+export default function ResultCard({ result }: ResultCardProps) {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'Utility':

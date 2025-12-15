@@ -5,12 +5,10 @@ import { ClassifyResponse } from './api/client';
 
 function App() {
   const [classificationResult, setClassificationResult] = useState<ClassifyResponse | null>(null);
-  const [originalMessage, setOriginalMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleResult = (result: ClassifyResponse, message: string) => {
+  const handleResult = (result: ClassifyResponse) => {
     setClassificationResult(result);
-    setOriginalMessage(message);
   };
 
   return (
@@ -56,7 +54,6 @@ function App() {
         {classificationResult && !isLoading && (
           <ResultCard
             result={classificationResult}
-            originalMessage={originalMessage}
           />
         )}
       </div>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { classifyMessage, ClassifyResponse } from '../api/client';
 
 interface ClassifierFormProps {
-  onResult: (result: ClassifyResponse, message: string) => void;
+  onResult: (result: ClassifyResponse) => void;
   onLoading: (loading: boolean) => void;
 }
 
@@ -19,7 +19,7 @@ export default function ClassifierForm({ onResult, onLoading }: ClassifierFormPr
 
     try {
       const result = await classifyMessage(message);
-      onResult(result, message);
+      onResult(result);
     } catch (error) {
       console.error('Error classifying message:', error);
       alert('Failed to classify message. Please try again.');
