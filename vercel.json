@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pip install -r requirements.txt && cd frontend && npm install && npm run build",
+  "buildCommand": "python -m pip install -r requirements.txt && cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "installCommand": "cd frontend && npm install",
   "rewrites": [
