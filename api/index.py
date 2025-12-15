@@ -82,11 +82,5 @@ async def rewrite_utility(request: RewriteRequest):
 
 
 # Vercel serverless function handler
-# Use lifespan="off" to avoid async context manager issues
-try:
-    handler = Mangum(app, lifespan="off")
-except Exception as e:
-    import sys
-    print(f"Error creating Mangum handler: {e}", file=sys.stderr)
-    print(f"Traceback: {traceback.format_exc()}", file=sys.stderr)
-    raise
+# Vercel's Python runtime automatically handles ASGI apps (FastAPI)
+# Export the app directly - Vercel will wrap it automatically
