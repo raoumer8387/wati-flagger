@@ -22,7 +22,7 @@ except ImportError as e:
     print(f"Files in current dir: {os.listdir(current_dir) if os.path.exists(current_dir) else 'DIR NOT FOUND'}", file=sys.stderr)
     raise
 
-app = FastAPI(title="WhatsApp Template Classifier API")
+app = FastAPI(title="WhatsApp Template Classifier API", root_path="/api")
 
 # Configure CORS - allow all origins for Vercel deployment
 app.add_middleware(
