@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from mangum import Mangum
 import traceback
 
 # Import from local api directory (files are copied here for Vercel deployment)
