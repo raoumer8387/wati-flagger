@@ -3,7 +3,7 @@
   "outputDirectory": "frontend/dist",
   "installCommand": "python -m pip install -r requirements.txt || true",
   "functions": {
-    "api/**/*.py": {
+    "api/index.py": {
       "includeFiles": "api/**"
     }
   },
